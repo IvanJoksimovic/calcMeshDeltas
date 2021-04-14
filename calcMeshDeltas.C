@@ -24,18 +24,26 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Application
-    postChannel
-
-Group
-    grpPostProcessingUtilities
+    calcMeshDeltas
 
 Description
-    Post-process data from channel flow calculations.
 
-    For each time: calculate: txx, txy,tyy, txy,
-    eps, prod, vorticity, enstrophy and helicity. Assuming that the mesh
-    is periodic in the x and z directions, collapse Umeanx, Umeany, txx,
-    txy and tyy to a line and print them as standard output.
+Calculates different mesh metric quantities, i.e. characteristic length scale of the mesh:
+
+- deltaCbrt, length scale based on the cubic root of mech volume
+- deltaMax, length scale based on the maximum distance between faces (if mesh is isotropic, this is the same as deltaCbrt)
+- deltaMin, length scale based on the minimum distance between faces (if mesh is isotropic, this is the same as deltaCbrt)
+
+call:
+calcMeshDelta -latestTime 
+
+Optionally, it cacluates the Kolmogorov length scale, if epsilon is provided
+
+call:
+calcMeshDelta -latestTime -epsilonName epsilon
+
+
+
 
 \*---------------------------------------------------------------------------*/
 
