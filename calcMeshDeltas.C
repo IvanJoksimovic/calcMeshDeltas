@@ -40,10 +40,6 @@ Description
 \*---------------------------------------------------------------------------*/
 
 #include "fvCFD.H"
-//#include "channelIndex.H"
-//#include "makeGraph.H"
-
-//#include "OSspecific.H"
 
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
