@@ -227,7 +227,7 @@ int main(int argc, char *argv[])
 
           if(nu.value() == 0)
           {
-            Info << "ERROR: Read constant zero viscosity, viscosity must be defined in constant/transportProperties" << endl;
+            Info << "ERROR: Unable to read viscosity, it must must be defined in constant/transportProperties" << endl;
             Info << "Terminating program!" << endl;
             return 0;
           }
