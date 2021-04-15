@@ -35,9 +35,9 @@ Calculates different mesh metric quantities, i.e. characteristic length scale of
 - deltaMin, length scale based on the minimum distance between faces (if mesh is isotropic, this is the same as deltaCbrt)
 
 call:
-calcMeshDelta -latestTime 
+calcMeshDelta -latestTime
 
-Optionally, it cacluates the Kolmogorov length scale, if epsilon is provided
+Optionally, it cacluates the Kolmogorov length scale and mesh-to-Kolmogorov scale ratio, if epsilon is provided
 
 call:
 calcMeshDelta -latestTime -epsilonName epsilon
@@ -66,7 +66,6 @@ int main(int argc, char *argv[])
         "Specify the name of the epsilon field"
     );
 
-    //argList::noParallel();
     timeSelector::addOptions();
 
     #include "setRootCase.H"
@@ -181,12 +180,11 @@ int main(int argc, char *argv[])
             IOobject::NO_READ
         );
 
-        bool foundEpsilon = header.good();// mesh.foundObject<volScalarField>(epsilonName);
+        bool foundEpsilon = header.good();
 
         if(!foundEpsilon)
         {
           Info << "Not calculating deltaKolmogorov, no field " << epsilonName <<" found in " << runTime.timeName() << endl;
-          Info << mesh.thisDb().sortedNames() << endl;
         }
         else
         {
@@ -248,9 +246,25 @@ int main(int argc, char *argv[])
               pow(pow(nu,3)/epsilon,0.25)
           );
 
-          //deltaKolmogorov = pow(pow(nu,3)/epsilon,0.25);
           Info << "Writting " << deltaKolmogorov.name() <<" to " << runTime.timeName() << endl;
           deltaKolmogorov.write();
+
+          volScalarField meshDeltaOverdeltaKolmogorov
+          (
+              IOobject
+              (
+                  "meshDeltaOverdeltaKolmogorov",
+                  runTime.timeName(),
+                  mesh,
+                  IOobject::NO_READ,
+                  IOobject::AUTO_WRITE
+              ),
+              deltaMax/deltaKolmogorov
+          );
+
+          Info << "Writting " << meshDeltaOverdeltaKolmogorov.name() <<" to " << runTime.timeName() << endl;
+          meshDeltaOverdeltaKolmogorov.write();
+
         }
 
 
